@@ -17,19 +17,26 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 import avanzo.composeapp.generated.resources.Res
 import avanzo.composeapp.generated.resources.compose_multiplatform
+import com.jdev.avanzo.presentation.FoodViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 @Preview
 fun App() {
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
+
+        val foodViewModel = koinViewModel<FoodViewModel>()
+
         Column(
             modifier = Modifier
                 .safeContentPadding()
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Button(onClick = { showContent = !showContent }) {
+            Button(onClick = {
+                foodViewModel.addFood()
+            }) {
                 Text("Click me!")
             }
             AnimatedVisibility(showContent) {

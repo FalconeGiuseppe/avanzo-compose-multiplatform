@@ -1,13 +1,14 @@
 package com.jdev.avanzo.util
 
 enum class NetworkError : Error {
-    REQUEST_TIMEOUT,
-    UNAUTHORIZED,
+    UNKNOWN,
     CONFLICT,
-    TOO_MANY_REQUESTS,
     NO_INTERNET,
-    PAYLOAD_TOO_LARGE,
+    UNAUTHORIZED,
     SERVER_ERROR,
     SERIALIZATION,
-    UNKNOWN;
+    REQUEST_TIMEOUT,
+    PAYLOAD_TOO_LARGE,
+    TOO_MANY_REQUESTS,
+    DIFFERENT_BODY_TYPE,
 }
