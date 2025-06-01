@@ -44,6 +44,8 @@ kotlin {
             implementation(libs.bundles.androidx)
             implementation(libs.bundles.koin)
             implementation(libs.bundles.ktor)
+
+            implementation(libs.androidx.navigation.compose)
         }
 
         androidMain.dependencies {
