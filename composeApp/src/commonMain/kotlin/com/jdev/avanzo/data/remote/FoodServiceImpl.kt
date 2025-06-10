@@ -1,6 +1,7 @@
 package com.jdev.avanzo.data.remote
 
-import com.jdev.avanzo.data.remote.model.FoodDetail
+import com.jdev.avanzo.data.remote.model.ApiResponse
+import com.jdev.avanzo.data.remote.model.Food
 import com.jdev.avanzo.util.NetworkError
 import com.jdev.avanzo.util.Result
 import io.ktor.client.HttpClient
@@ -12,23 +13,29 @@ import kotlinx.serialization.SerializationException
 
 class FoodServiceImpl(
     val httpClient: HttpClient
-): FoodService {
-    override suspend fun addFood(): Result<FoodDetail, NetworkError> {
+) : FoodService {
+    override suspend fun getFoods(): Result<Food, NetworkError> {
         val response = try {
-            httpClient.get(urlString = "") {}
-        } catch (e: UnresolvedAddressException) {
+            httpClient.get(urlString = "foods") {}
+        } catch (_: UnresolvedAddressException) {
             return Result.Error(NetworkError.NO_INTERNET)
-        } catch (e: SerializationException) {
+        } catch (_: SerializationException) {
             return Result.Error(NetworkError.SERIALIZATION)
         }
 
-        return when(response.status.value) {
+        return when (response.status.value) {
             in 200..299 -> {
 
                 try {
-                    val result = response.body<FoodDetail>()
-                    Result.Success(result)
-                } catch (e: NoTransformationFoundException) {
+                    val result = response.body<ApiResponse<Food>>()
+                    if (result.success) {
+                        Result.Success(data = result.data)
+                    } else {
+                        Result.Error(NetworkError.UNKNOWN)
+                    }
+
+                    Result.Success(result.data)
+                } catch (_: NoTransformationFoundException) {
                     Result.Error(NetworkError.DIFFERENT_BODY_TYPE)
                 }
             }

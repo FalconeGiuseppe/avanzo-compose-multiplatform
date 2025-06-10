@@ -47,6 +47,8 @@ kotlin {
             implementation(libs.bundles.ktor)
 
             implementation(libs.androidx.navigation.compose)
+
+            implementation(libs.kotlin.logging)
         }
 
         androidMain.dependencies {

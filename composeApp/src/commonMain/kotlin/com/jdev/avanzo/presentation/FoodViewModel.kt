@@ -17,13 +17,11 @@ class FoodViewModel(
     private val _uiState = MutableStateFlow(FoodUiState())
     val uiState: StateFlow<FoodUiState> = _uiState.asStateFlow()
 
-    fun addFood() {
+    fun getFoods() {
         viewModelScope.launch {
             foodUseCase().collect { result ->
                 _uiState.value = _uiState.value.copy(isLoading = true)
-                result.onSuccess {
-
-                }.onError {
+                result.onSuccess {}.onError { it ->
                     _uiState.value = _uiState.value.copy(isErrorState = true, errorMessage = it.name)
                 }
             }
