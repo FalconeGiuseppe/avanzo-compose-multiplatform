@@ -1,5 +1,7 @@
 package com.jdev.avanzo.di.module
 
+import com.jdev.avanzo.util.network.NetworkConstants
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -15,11 +17,11 @@ import io.ktor.http.headers
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 
-expect val engine: HttpClientEngine
+val kotlinLogger = KotlinLogging.logger { }
 
 val networkModule = module {
     single<HttpClient> {
-        HttpClient(engine) {
+        HttpClient {
             install(ContentNegotiation) {
                 Json {
                     Json {
@@ -34,7 +36,7 @@ val networkModule = module {
             // Response Log
             install(ResponseObserver) {
                 onResponse { response ->
-                    print("CLIENT-LOG-RESP: $response")
+                    kotlinLogger.info { "CLIENT-LOG-RESP: $response" }
                 }
             }
 
@@ -42,16 +44,16 @@ val networkModule = module {
             install(Logging) {
                 logger = object : Logger {
                     override fun log(message: String) {
-                        print("KTOR-LOG-REQ: $message")
+                        kotlinLogger.info { "KTOR-LOG-REQ: $message" }
                     }
                 }
-                level = LogLevel.BODY
+                level = LogLevel.ALL
             }
 
             defaultRequest {
                 url {
                     protocol = URLProtocol.HTTPS
-                    // host = NetworkConstants.BASE_URL
+                    host = NetworkConstants.BASE_URL
                 }
                 contentType(ContentType.Application.Json)
             }
