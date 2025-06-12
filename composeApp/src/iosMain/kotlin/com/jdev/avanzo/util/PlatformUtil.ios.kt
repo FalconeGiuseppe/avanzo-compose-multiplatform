@@ -6,6 +6,6 @@ import kotlinx.cinterop.ExperimentalForeignApi
 import org.jetbrains.skia.Image
 
 @OptIn(ExperimentalForeignApi::class)
-actual fun String.toImageBitmapFromBase64(): ImageBitmap?  {
-    return Image.makeFromEncoded(bytes = this.encodeToByteArray()).toComposeImageBitmap()
+actual fun ByteArray.toImageBitmapFromBase64(): ImageBitmap?  {
+    return Image.makeFromEncoded(bytes = this).toComposeImageBitmap()
 }
