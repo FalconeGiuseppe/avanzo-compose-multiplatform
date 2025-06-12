@@ -2,8 +2,8 @@ package com.jdev.avanzo.data.remote
 
 import com.jdev.avanzo.data.remote.model.ApiResponse
 import com.jdev.avanzo.data.remote.model.Food
-import com.jdev.avanzo.util.NetworkError
-import com.jdev.avanzo.util.Result
+import com.jdev.avanzo.util.network.NetworkError
+import com.jdev.avanzo.util.network.Result
 import io.ktor.client.HttpClient
 import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
@@ -14,7 +14,7 @@ import kotlinx.serialization.SerializationException
 class FoodServiceImpl(
     val httpClient: HttpClient
 ) : FoodService {
-    override suspend fun getFoods(): Result<Food, NetworkError> {
+    override suspend fun getFoods(): Result<List<Food>, NetworkError> {
         val response = try {
             httpClient.get(urlString = "foods") {}
         } catch (_: UnresolvedAddressException) {
@@ -27,7 +27,7 @@ class FoodServiceImpl(
             in 200..299 -> {
 
                 try {
-                    val result = response.body<ApiResponse<Food>>()
+                    val result = response.body<ApiResponse<List<Food>>>()
                     if (result.success) {
                         Result.Success(data = result.data)
                     } else {
