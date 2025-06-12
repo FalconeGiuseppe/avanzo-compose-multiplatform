@@ -1,4 +1,4 @@
-package com.jdev.avanzo.util
+package com.jdev.avanzo.util.network
 
 enum class NetworkError : Error {
     UNKNOWN,
